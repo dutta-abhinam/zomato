@@ -1,0 +1,37 @@
+# CSAO Rail Recommendation System — dependencies
+# Versions are pinned to a combination verified to work together on
+# Windows / Python 3.11 (CPU). Notes:
+#   * torch 2.2.2 is the last CPU wheel that installs cleanly under Windows'
+#     260-char path limit; it requires numpy < 2.0.
+#   * transformers/sentence-transformers pinned for torch 2.2.2 compatibility.
+
+# --- core data / ML ---
+numpy==1.26.4            # <2.0 required by torch 2.2.2
+pandas==2.2.2
+scikit-learn==1.5.1
+scipy==1.13.1
+pyarrow==16.1.0          # parquet IO
+
+# --- retrieval (Item2Vec + ANN) ---
+gensim==4.3.3            # Item2Vec (word2vec on order baskets)
+faiss-cpu==1.8.0         # approximate nearest-neighbour retrieval
+
+# --- ranking ---
+lightgbm==4.5.0          # LambdaRank ranker
+torch==2.2.2             # GRU cart-state encoder
+
+# --- cold-start / LLM embeddings ---
+sentence-transformers==2.7.0   # all-MiniLM-L6-v2 content embeddings
+transformers==4.41.2
+huggingface-hub==0.23.4
+tokenizers==0.19.1
+
+# --- serving ---
+redis==5.0.7             # online feature store client
+fakeredis==2.23.3        # in-process Redis for local latency benchmarking
+
+# --- viz / reporting ---
+matplotlib==3.9.1
+seaborn==0.13.2
+reportlab==4.2.2         # single-PDF submission builder
+tqdm==4.66.4
