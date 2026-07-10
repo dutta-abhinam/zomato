@@ -1,0 +1,13 @@
+{
+  "dim": 64,
+  "window": 6,
+  "sg": 1,
+  "negative": 8,
+  "epochs": 8,
+  "min_count": 3,
+  "n_sentences": 277866,
+  "n_tokens": 1474835,
+  "vocab_size": 13193,
+  "n_items": 15000,
+  "coverage": 0.8795333333333333
+}

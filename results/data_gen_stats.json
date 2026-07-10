@@ -1,0 +1,25 @@
+{
+  "n_users": 50000,
+  "n_cold": 15000,
+  "cold_frac": 0.3,
+  "n_items": 15000,
+  "n_restaurants": 800,
+  "n_sessions": 278079,
+  "n_events": 2044883,
+  "n_accept": 1072979,
+  "n_reject": 544841,
+  "n_add": 402069,
+  "n_remove": 24994,
+  "accept_rate": 0.6632252042872507,
+  "peak_share": 0.4686678895565174,
+  "cold_frac_by_city": {
+    "Ahmedabad": 0.3,
+    "Bangalore": 0.3,
+    "Chennai": 0.3,
+    "Delhi": 0.3,
+    "Hyderabad": 0.3,
+    "Kolkata": 0.3,
+    "Mumbai": 0.3,
+    "Pune": 0.3
+  }
+}
