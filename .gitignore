@@ -28,3 +28,7 @@ Thumbs.db
 # Models cache
 .cache/
 *.safetensors
+
+# Regenerable report figures / preview renders (PDF is the deliverable)
+reports/_preview/
+reports/figures/
