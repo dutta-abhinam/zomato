@@ -29,6 +29,9 @@ tokenizers==0.19.1
 # --- serving ---
 redis==5.0.7             # online feature store client
 fakeredis==2.23.3        # in-process Redis for local latency benchmarking
+fastapi==0.111.0         # cart-update recommendation API
+uvicorn==0.30.1          # ASGI server
+httpx==0.27.0            # async client for the load test
 
 # --- viz / reporting ---
 matplotlib==3.9.1
