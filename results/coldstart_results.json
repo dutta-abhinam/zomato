@@ -1,0 +1,14 @@
+{
+  "n_groups": 1974,
+  "p10_popularity_fallback": 0.19680851063829788,
+  "p10_collaborative_ranker": 0.2159067882472138,
+  "p10_content": 0.2173758865248227,
+  "p10_content_mmr": 0.21382978723404256,
+  "lift_vs_popularity": 0.1045045045045045,
+  "lift_content_increment": 0.006804317221961493,
+  "top10_redundancy_content": 0.5056894547188052,
+  "top10_redundancy_content_mmr": 0.48921477673867797,
+  "mmr_precision_cost": 0.016313213703099533,
+  "content_boost": 0.15,
+  "mmr_lambda": 0.7
+}

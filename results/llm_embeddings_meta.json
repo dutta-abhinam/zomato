@@ -1,0 +1,7 @@
+{
+  "model": "all-MiniLM-L6-v2",
+  "dim": 384,
+  "n_items": 15000,
+  "n_users": 50000,
+  "n_unique_profiles": 240
+}
