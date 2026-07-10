@@ -5,9 +5,9 @@
   "negative": 8,
   "epochs": 8,
   "min_count": 3,
-  "n_sentences": 277866,
-  "n_tokens": 1474835,
-  "vocab_size": 13193,
+  "n_sentences": 277524,
+  "n_tokens": 1457994,
+  "vocab_size": 13150,
   "n_items": 15000,
-  "coverage": 0.8795333333333333
+  "coverage": 0.8766666666666667
 }

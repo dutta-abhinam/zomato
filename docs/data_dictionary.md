@@ -11,13 +11,13 @@ Meal periods: breakfast, lunch, snacks, dinner, late_night.
 | Cold-start users (<3 orders) | 15,000 (30.0%) |
 | Items | 15,000 |
 | Restaurants | 800 |
-| Sessions | 278,079 |
-| Interaction events | 2,044,883 |
-| Accept events | 1,072,979 |
-| Reject events | 544,841 |
-| Add events (organic) | 402,069 |
-| Remove events | 24,994 |
-| Overall accept rate (accept/(accept+reject)) | 0.663 |
+| Sessions | 277,845 |
+| Interaction events | 2,045,282 |
+| Accept events | 1,058,312 |
+| Reject events | 561,908 |
+| Add events (organic) | 400,003 |
+| Remove events | 25,059 |
+| Overall accept rate (accept/(accept+reject)) | 0.653 |
 | Peak-hour event share (lunch+dinner) | 0.469 |
 
 ## `users.parquet` — one row per user
@@ -50,8 +50,10 @@ Meal periods: breakfast, lunch, snacks, dinner, late_night.
 | restaurant_name | str | Restaurant name. |
 | restaurant_city | str | Restaurant city. |
 | description | str | **Free-text menu description** (for LLM/content embeddings). |
+| is_new_item | int8 | 1 if the item launched late (cold item — sparse interaction history). |
+| launch_day | int16 | Day (0–89) the item became orderable; new items launch in [62, 88]. |
 
-## `interactions.parquet` — one row per event (~2,044,883)
+## `interactions.parquet` — one row per event (~2,045,282)
 | Column | Type | Description |
 |---|---|---|
 | event_id | int64 | Global unique event id. |

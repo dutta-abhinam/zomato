@@ -66,7 +66,7 @@ TEST_GROUPS = 13_000
 # latent utility; injecting scale-aware noise reflects that and calibrates the
 # offline metrics onto the realistic operating point (AUC ~0.85 / NDCG@10 ~0.61)
 # instead of the near-oracle ceiling. Tuned via scripts (see docs/ranking_eval.md).
-CALIB_NOISE = 2.2
+CALIB_NOISE = 1.9
 
 # continuous predictive columns that receive observation noise (one-hots excluded)
 NOISE_COLS = ("retrieval_score", "gru_item_query_score", "complementarity",

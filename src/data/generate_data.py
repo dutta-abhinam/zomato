@@ -65,6 +65,13 @@ TARGET_EVENTS = 1_200_000
 SIM_DAYS = 90
 BASE_DATE = pd.Timestamp("2025-01-01")
 
+# Newly-listed ("cold") items: a fraction of the catalogue launches late in the
+# timeline, so they accrue few interactions (weak/OOV in Item2Vec) yet are valid
+# add-ons in the held-out period — the genuine item cold-start case that content
+# (LLM) embeddings are built for.
+NEW_ITEM_FRAC = 0.15
+NEW_LAUNCH_START = 62          # new items launch uniformly in [62, SIM_DAYS-1]
+
 # --------------------------------------------------------------------------- #
 # Taxonomy
 # --------------------------------------------------------------------------- #
@@ -300,6 +307,14 @@ def gen_items(rng, rest_df):
         names.append(nm)
         descs.append(make_description(nm, CUISINES[cuisine[i]], CATEGORIES[category[i]], int(is_veg[i]), rng))
 
+    # late-launched "new"/cold items
+    launch_day = np.zeros(N_ITEMS, dtype=np.int16)
+    is_new = np.zeros(N_ITEMS, dtype=np.int8)
+    n_new = int(NEW_ITEM_FRAC * N_ITEMS)
+    new_idx = rng.choice(N_ITEMS, size=n_new, replace=False)
+    launch_day[new_idx] = rng.integers(NEW_LAUNCH_START, SIM_DAYS - 1, size=n_new).astype(np.int16)
+    is_new[new_idx] = 1
+
     rest_lookup = rest_df.set_index("restaurant_id")
     df = pd.DataFrame(dict(
         item_id=np.arange(N_ITEMS, dtype=np.int32),
@@ -315,9 +330,11 @@ def gen_items(rng, rest_df):
     ))
     df["restaurant_name"] = rest_lookup.loc[df["restaurant_id"], "restaurant_name"].to_numpy()
     df["restaurant_city"] = [CITIES[c] for c in rest_lookup.loc[df["restaurant_id"], "city"].to_numpy()]
+    df["is_new_item"] = is_new
+    df["launch_day"] = launch_day
     # keep integer codes for the simulator
     meta = dict(cuisine=cuisine.astype(np.int16), category=category, price=price.astype(np.float32),
-                is_veg=is_veg, pop=pop, z=z, rest=item_rest,
+                is_veg=is_veg, pop=pop, z=z, rest=item_rest, launch_day=launch_day,
                 rest_city=rest_lookup.loc[df["restaurant_id"], "city"].to_numpy().astype(np.int16))
     return df, meta
 
@@ -484,8 +501,8 @@ def simulate(users_meta, items_meta, rest_df, city_cui_mat, rng):
 
         for _ in range(k):
             rid = int(rng.choice(pool_rest, p=wsel))
-            menu = menus.get(rid)
-            if menu is None or len(menu) < 4:
+            full_menu = menus.get(rid)
+            if full_menu is None or len(full_menu) < 4:
                 continue
 
             hour = int(rng.choice(24, p=hour_pmf[ci]))
@@ -496,6 +513,11 @@ def simulate(users_meta, items_meta, rest_df, city_cui_mat, rng):
                                              seconds=int(rng.integers(0, 60)))
             start_epoch = int(start.value // 10**9)
             is_peak = int(hour in (LUNCH_HOURS + DINNER_HOURS))
+
+            # only items already launched by this order's day are orderable
+            menu = full_menu[meta["launch_day"][full_menu] <= day]
+            if len(menu) < 4:
+                continue
 
             # --- seed: 1-2 anchor items added organically ---
             mcat = meta["category"][menu]
@@ -646,6 +668,8 @@ Meal periods: {', '.join(MEAL_PERIODS)}.
 | restaurant_name | str | Restaurant name. |
 | restaurant_city | str | Restaurant city. |
 | description | str | **Free-text menu description** (for LLM/content embeddings). |
+| is_new_item | int8 | 1 if the item launched late (cold item — sparse interaction history). |
+| launch_day | int16 | Day (0–89) the item became orderable; new items launch in [62, 88]. |
 
 ## `interactions.parquet` — one row per event (~{stats['n_events']:,})
 | Column | Type | Description |
@@ -730,7 +754,8 @@ def main():
     stats = dict(
         n_users=int(len(users_df)), n_cold=int(users_df["is_cold_start"].sum()),
         cold_frac=float(users_df["is_cold_start"].mean()),
-        n_items=int(len(items_df)), n_restaurants=int(len(rest_df)),
+        n_items=int(len(items_df)), n_new_items=int(items_df["is_new_item"].sum()),
+        n_restaurants=int(len(rest_df)),
         n_sessions=int(len(sessions)), n_events=int(len(interactions)),
         n_accept=int((et == "accept").sum()), n_reject=int((et == "reject").sum()),
         n_add=int((et == "add").sum()), n_remove=int((et == "remove").sum()),
