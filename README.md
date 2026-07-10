@@ -1,5 +1,7 @@
 # Cart Super Add-On (CSAO) Rail Recommendation System
 
+📄 **[Submission PDF → reports/CSAO_Rail_Submission.pdf](reports/CSAO_Rail_Submission.pdf)** — the single-document write-up (approach, data, models, evaluation, system design, business impact).
+
 A real-time recommendation engine that suggests complementary add-on items as a
 customer builds their cart on a food-delivery app. Given the **current cart
 state** (an ordered sequence of items) plus **context** (time of day, city,
