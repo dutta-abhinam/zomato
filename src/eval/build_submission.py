@@ -237,7 +237,6 @@ def build():
         "repository. <b>Set these to public before submitting</b> and replace the placeholders:", BODY))
     E.append(bullets([
         "Code repository: <font color='#3b6fb5'>https://github.com/dutta-abhinam/zomato</font> (public)",
-        "Runnable notebook / Colab: <font color='#3b6fb5'>&lt;add public notebook link&gt;</font>",
         "Reproduce: <font face='Courier'>python -m src.data.generate_data → src.retrieval.train_item2vec → "
         "src.retrieval.build_faiss_index → src.features.gru_cart_encoder → src.ranking.train_ranker → "
         "src.coldstart.llm_embeddings → src.coldstart.mmr_rerank → src.serving.load_test → "
